@@ -2,13 +2,16 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for tsh.
+PLUGIN_NAME="asdf-tsh"
+RELEASES_URL="https://goteleport.com/download"
 GH_REPO="https://github.com/gravitational/teleport"
 TOOL_NAME="tsh"
 TOOL_TEST="tsh version"
 
+echodebug() { printf "%s\n" "$*" >&2; }
+
 fail() {
-	echo -e "asdf-$TOOL_NAME: $*"
+	echo -e "asdf-$TOOL_NAME: $* failed"
 	exit 1
 }
 
@@ -19,33 +22,69 @@ if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 
-sort_versions() {
-	sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
-		LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
+download_versions() {
+	curl "${curl_opts[@]}" -s "${RELEASES_URL}" |
+		grep -oE '<script id="__NEXT_DATA__" type="application\/json">(.+)<\/script>' |
+		sed 's/<script id="__NEXT_DATA__" type="application\/json">//; s/<\/script>//' |
+		jq '.props.pageProps.initialDownloads[].versions | sort_by(.version)'
 }
 
-list_github_tags() {
-	git ls-remote --tags --refs "$GH_REPO" |
-		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+filter_pre-release() {
+	jq 'map(select(.status == "published"))'
 }
 
-list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if tsh has other means of determining installable versions.
-	list_github_tags
+parse_versions() {
+	jq '.[].version' | jq -rs '@sh'
+}
+
+select_version() {
+	version="$1"
+	if ! jq -e '.[] | select(.version | startswith("14"))' | jq -se 'first'; then
+		fail "Could not parse version $version from $RELEASES_URL"
+	fi | jq '.assets[] + {version: .version}'
+}
+
+filter_os() {
+	os="$1"
+	supported_os=("linux" "darwin" "windows")
+	if [[ ! ${supported_os[*]} =~ $os ]]; then
+		fail "Unsupported OS: $os"
+	fi
+	jq -e --arg os "$os" 'select(.os == $os)'
+}
+
+filter_arch() {
+	arch=$1
+	supported_arch=("amd64" "arm64")
+	if [[ ! ${supported_arch[*]} =~ $arch ]]; then
+		fail "Unsupported architecture: $arch"
+	fi
+	jq -e --arg arch "$arch" 'select(.arch == $arch)'
+}
+
+assets_length() {
+	jq -s 'if length != 1 then halt_error(1) else .[] end'
 }
 
 download_release() {
-	local version filename url
-	version="$1"
+	local url filename
+	url="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for tsh
-	url="$GH_REPO/archive/v${version}.tar.gz"
-
-	echo "* Downloading $TOOL_NAME release $version..."
+	echo "* Downloading $url into $filename"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+}
+
+check_sha256() {
+	local filename expected_sha256
+	filename="$1"
+	expected_sha256="$2"
+
+	echo "* Checking sha256 of $filename"
+	actual_sha256=$(shasum -a 256 "$filename" | cut -d' ' -f1)
+	if [ "$actual_sha256" != "$expected_sha256" ]; then
+		fail "SHA256 mismatch for $filename: expected $expected_sha256, got $actual_sha256"
+	fi
 }
 
 install_version() {
@@ -59,7 +98,7 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		cp -r "$ASDF_DOWNLOAD_PATH/"{teleport,tctl,tsh,tbot} "$install_path"
 
 		# TODO: Assert tsh executable exists.
 		local tool_cmd
