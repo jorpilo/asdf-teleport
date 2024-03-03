@@ -49,6 +49,9 @@ check_sha256 "$filename" "$sha256"
 # #  Extract contents of tar.gz file into the download directory
 tar -xzf "$filename" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $filename"
 
+echo "$PLUGIN_NAME: Extracted $filename to $ASDF_DOWNLOAD_PATH"
+
+
 # # Remove the tar.gz file since we don't need to keep it
 rm "$filename"
 

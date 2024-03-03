@@ -5,7 +5,7 @@ set -euo pipefail
 PLUGIN_NAME="asdf-teleport"
 RELEASES_URL="https://goteleport.com/download"
 GH_REPO="https://github.com/gravitational/teleport"
-TOOL_NAME="tsh"
+TOOL_NAME="teleport"
 TOOL_TEST="tsh version"
 
 echodebug() { printf "%s\n" "$*" >&2; }
