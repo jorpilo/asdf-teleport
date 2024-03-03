@@ -36,7 +36,7 @@ release=$(download_versions |
 	select_version "$ASDF_INSTALL_VERSION" |
 	filter_os "$ASDF_OS" |
 	filter_arch "$ASDF_ARCH" |
-	filter_extension "tar.gz" | get_first)
+	filter_extension "tar.gz" "$ASDF_INSTALL_VERSION" | get_first)
 
 echo "release: $release"
 url=$(jq -re '.publicUrl' <<<"$release")

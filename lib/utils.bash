@@ -60,11 +60,16 @@ filter_arch() {
 
 filter_extension() {
 	type=$1
+	version=$2
 	supported_type=("tar.gz")
 	if [[ ! ${supported_type[*]} =~ $type ]]; then
 		fail "Unsupported extension: $type"
 	fi
-	jq -e --arg type "$type" 'map(select(.name | endswith($type)))'
+	jq -e --arg type "$type" --arg version "$version" 'map(
+		select(
+			(.name | startswith("teleport-v"+$version)) and (.name | endswith($type))
+		)
+	)'
 
 }
 
@@ -94,7 +99,8 @@ detect_arch() {
 	i386 | i686) architecture="386" ;;
 	x86_64 | amd64) architecture="amd64" ;;
 	aarch64) architecture="arm64" ;;
-	arm*) architecture="arm" ;;
+	arm64) architecture="arm64" ;;
+	arm) architecture="arm" ;;
 	*) architecture="UNKNOWN:${unameOut}" ;;
 	esac
 
