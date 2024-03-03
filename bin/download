@@ -8,6 +8,8 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=./lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
+echo "$PLUGIN_NAME: Begin download version $ASDF_INSTALL_VERSION"
+
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
 ${ASDF_OS:=""}
@@ -48,3 +50,5 @@ tar -xzf "$filename" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Coul
 
 # # Remove the tar.gz file since we don't need to keep it
 rm "$filename"
+
+echo "$PLUGIN_NAME: Done download version $ASDF_INSTALL_VERSION"

@@ -11,7 +11,7 @@ TOOL_TEST="tsh version"
 echodebug() { printf "%s\n" "$*" >&2; }
 
 fail() {
-	echo -e "asdf-$TOOL_NAME: $* failed"
+	echo -e "$PLUGIN_NAME: $* failed"
 	exit 1
 }
 
