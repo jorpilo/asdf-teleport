@@ -13,7 +13,7 @@ mkdir -p "$ASDF_DOWNLOAD_PATH"
 ${ASDF_OS:=""}
 ${ASDF_ARCH:=""}
 
-if [[ -n "$ASDF_OS" ]]; then
+if [[ -z "$ASDF_OS" ]]; then
 	echo "No ASDF_OS set, detecting..."
 	ASDF_OS=$(detect_os)
 fi
