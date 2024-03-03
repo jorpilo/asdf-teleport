@@ -17,15 +17,15 @@ echo "$PLUGIN_NAME: Begin download version $ASDF_INSTALL_VERSION"
 
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
-${ASDF_OS:=""}
-${ASDF_ARCH:=""}
+ASDF_OS="${ASDF_OS:-UNSET}"
+ASDF_ARCH="${ASDF_ARCH:-UNSET}"
 
-if [[ -z "$ASDF_OS" ]]; then
+if [[ "$ASDF_OS" == "UNSET" ]]; then
 	echo "No ASDF_OS set, detecting..."
 	ASDF_OS=$(detect_os)
 fi
 
-if [[ -z "$ASDF_ARCH" ]]; then
+if [[ "$ASDF_ARCH" == "UNSET" ]]; then
 	echo "No ASDF_ARCH set, detecting..."
 	ASDF_ARCH=$(detect_arch)
 fi
