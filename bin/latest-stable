@@ -7,8 +7,8 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 
 set -o allexport
 # shellcheck source=./lib/properties.env
-source "${plugin_dir}/lib/properties.env" set
-+o allexport
+source "${plugin_dir}/lib/properties.env"
+set +o allexport
 
 # shellcheck source=./lib/utils.bash
 . "${plugin_dir}/lib/utils.bash"
