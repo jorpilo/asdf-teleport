@@ -28,7 +28,7 @@ fi
 echo "Downloading release $ASDF_INSTALL_VERSION for OS: $ASDF_OS, Arch: $ASDF_ARCH"
 
 release=$(download_versions)
-echo" download_1"
+echo "download_1"
 release=$(filter_pre-release <<<"$release")
 echo "download_2"
 release=$(select_version "$ASDF_INSTALL_VERSION" <<<"$release")
