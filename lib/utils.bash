@@ -64,13 +64,13 @@ filter_arch() {
 	jq -e --arg arch "$arch" 'select(.arch == $arch)'
 }
 
-filter_type() {
+filter_extension() {
 	type=$1
 	supported_type=("tar.gz")
 	if [[ ! ${supported_type[*]} =~ $type ]]; then
-		fail "Unsupported type: $type"
+		fail "Unsupported extension: $type"
 	fi
-	jq -e --arg type "$type" 'select(.type == $type)'
+	jq -e --arg type "$type" 'select(.name | endswith($type))'
 
 }
 
