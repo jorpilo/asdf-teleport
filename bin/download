@@ -10,10 +10,22 @@ source "${plugin_dir}/lib/utils.bash"
 
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
+if [[ -z "$ASDF_OS" ]]; then
+	echo "No ASDF_OS set, detecting..."
+	ASDF_OS=$(detect_os)
+fi
+
+if [[ -z "$ASDF_ARCH" ]]; then
+	echo "No ASDF_ARCH set, detecting..."
+	ASDF_ARCH=$(detect_arch)
+fi
+
+echo "Downloading release $ASDF_INSTALL_VERSION for OS: $ASDF_OS, Arch: $ASDF_ARCH"
+
 release=$(download_versions |
 	filter_pre-release |
 	select_version "$ASDF_INSTALL_VERSION" |
-	filter_os "darwin" | filter_arch "arm64" |
+	filter_os "$ASDF_OS" | filter_arch "$ASDF_ARCH" |
 	assets_length)
 
 url=$(jq -re '.publicUrl' <<<"$release")

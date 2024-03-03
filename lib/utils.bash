@@ -66,6 +66,39 @@ assets_length() {
 	jq -s 'if length != 1 then halt_error(1) else .[] end'
 }
 
+detect_os() {
+	local machine unameOut
+
+	unameOut="$(uname -s)"
+	case "${unameOut}" in
+	Linux*) machine=linux ;;
+	Darwin*) machine=darwin ;;
+	*) machine="UNKNOWN:${unameOut}" ;;
+	esac
+	if [[ "${machine}" == UNKNOWN:* ]]; then
+		fail "Unsupported OS: $machine"
+	fi
+	echo "$machine"
+}
+
+detect_arch() {
+	local architecture unameOut
+	unameOut=$(uname -m)
+	case "${unameOut}" in
+	i386 | i686) architecture="386" ;;
+	x86_64 | amd64) architecture="amd64" ;;
+	aarch64) architecture="arm64" ;;
+	arm*) architecture="arm" ;;
+	*) architecture="UNKNOWN:${unameOut}" ;;
+	esac
+
+	if [[ "${architecture}" == UNKNOWN:* ]]; then
+		fail "Unsupported architecture: $architecture"
+	fi
+
+	echo "$architecture"
+}
+
 download_release() {
 	local url filename
 	url="$1"
