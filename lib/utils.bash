@@ -42,7 +42,7 @@ select_version() {
 	version="$1"
 	if ! jq -e --arg version "$version" 'map(select(.version | startswith($version)))| first'; then
 		fail "Could not parse version $version from $RELEASES_URL"
-	fi | jq '.assets[] + {version: .version}'
+	fi | jq '[.assets[] + {version: .version}]'
 }
 
 filter_os() {
@@ -52,7 +52,7 @@ filter_os() {
 	if [[ ! ${supported_os[*]} =~ $os ]]; then
 		fail "Unsupported OS: $os"
 	fi
-	jq -e --arg os "$os" 'select(.os == $os)'
+	jq -e --arg os "$os" 'map(select(.os == $os))'
 }
 
 filter_arch() {
@@ -61,7 +61,7 @@ filter_arch() {
 	if [[ ! ${supported_arch[*]} =~ $arch ]]; then
 		fail "Unsupported architecture: $arch"
 	fi
-	jq -e --arg arch "$arch" 'select(.arch == $arch)'
+	jq -e --arg arch "$arch" 'map(select(.arch == $arch))'
 }
 
 filter_extension() {
@@ -70,8 +70,12 @@ filter_extension() {
 	if [[ ! ${supported_type[*]} =~ $type ]]; then
 		fail "Unsupported extension: $type"
 	fi
-	jq -e --arg type "$type" 'select(.name | endswith($type))'
+	jq -e --arg type "$type" 'map(select(.name | endswith($type)))'
 
+}
+
+get_first() {
+	jq -re '.[0]'
 }
 
 detect_os() {
