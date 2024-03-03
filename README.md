@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-tsh [![Build](https://github.com/jorpilo/asdf-tsh/actions/workflows/build.yml/badge.svg)](https://github.com/jorpilo/asdf-tsh/actions/workflows/build.yml) [![Lint](https://github.com/jorpilo/asdf-tsh/actions/workflows/lint.yml/badge.svg)](https://github.com/jorpilo/asdf-tsh/actions/workflows/lint.yml)
+# asdf-teleport [![Build](https://github.com/jorpilo/asdf-teleport/actions/workflows/build.yml/badge.svg)](https://github.com/jorpilo/asdf-teleport/actions/workflows/build.yml) [![Lint](https://github.com/jorpilo/asdf-teleport/actions/workflows/lint.yml/badge.svg)](https://github.com/jorpilo/asdf-teleport/actions/workflows/lint.yml)
 
 [tsh](https://goteleport.com/docs/connect-your-client/tsh) plugin for the [asdf version manager](https://asdf-vm.com).
 
@@ -25,22 +25,22 @@
 Plugin:
 
 ```shell
-asdf plugin add tsh
+asdf plugin add teleport
 # or
-asdf plugin add tsh https://github.com/jorpilo/asdf-tsh.git
+asdf plugin add teleport https://github.com/jorpilo/asdf-teleport.git
 ```
 
 tsh:
 
 ```shell
 # Show all installable versions
-asdf list-all tsh
+asdf list-all teleport
 
 # Install specific version
-asdf install tsh latest
+asdf install teleport latest
 
 # Set a version globally (on your ~/.tool-versions file)
-asdf global tsh latest
+asdf global teleport latest
 
 # Now tsh commands are available
 tsh version
@@ -53,7 +53,7 @@ install & manage versions.
 
 Contributions of any kind welcome! See the [contributing guide](contributing.md).
 
-[Thanks goes to these contributors](https://github.com/jorpilo/asdf-tsh/graphs/contributors)!
+[Thanks goes to these contributors](https://github.com/jorpilo/asdf-teleport/graphs/contributors)!
 
 # License
 

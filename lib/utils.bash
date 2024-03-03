@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-PLUGIN_NAME="asdf-tsh"
+PLUGIN_NAME="asdf-teleport"
 RELEASES_URL="https://goteleport.com/download"
 GH_REPO="https://github.com/gravitational/teleport"
 TOOL_NAME="tsh"
