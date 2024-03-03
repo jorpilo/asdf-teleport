@@ -9,6 +9,6 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 source "${plugin_dir}/lib/utils.bash"
 
 echo "$PLUGIN_NAME: Begin list-all"
-download_versions | filter_pre-release | parse_versions
+download_versions | filter_prerelease | parse_versions
 
 echo "$PLUGIN_NAME: Done list-all"

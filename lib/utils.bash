@@ -29,7 +29,7 @@ download_versions() {
 		jq '.props.pageProps.initialDownloads[].versions | sort_by(.version)'
 }
 
-filter_pre-release() {
+filter_prerelease() {
 	jq 'map(select(.status == "published"))'
 }
 
@@ -39,12 +39,13 @@ parse_versions() {
 
 select_version() {
 	version="$1"
-	if ! jq -e '.[] | select(.version | startswith("14"))' | jq -se 'first'; then
+	if ! jq -e --arg version "$version" '.[] | select(.version | startswith($version))' | jq -se 'first'; then
 		fail "Could not parse version $version from $RELEASES_URL"
 	fi | jq '.assets[] + {version: .version}'
 }
 
 filter_os() {
+	local supported_os
 	os="$1"
 	supported_os=("linux" "darwin" "windows")
 	if [[ ! ${supported_os[*]} =~ $os ]]; then
