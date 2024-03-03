@@ -2,7 +2,7 @@
 
 # asdf-teleport [![Build](https://github.com/jorpilo/asdf-teleport/actions/workflows/build.yml/badge.svg)](https://github.com/jorpilo/asdf-teleport/actions/workflows/build.yml) [![Lint](https://github.com/jorpilo/asdf-teleport/actions/workflows/lint.yml/badge.svg)](https://github.com/jorpilo/asdf-teleport/actions/workflows/lint.yml)
 
-[tsh](https://goteleport.com/docs/connect-your-client/tsh) plugin for the [asdf version manager](https://asdf-vm.com).
+[teleport|tsh](https://goteleport.com/docs/connect-your-client/tsh) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -15,10 +15,9 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
-- `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- `bash`, `curl`, `tar`, `jq` and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
+- `ASDF_OS`: set this environment variable in your shell config to install a different OS version of the tool
+- `ASDF_ARCH`: set this environment variable in your shell config to install a different ARCH version of the tool
 
 # Install
 
