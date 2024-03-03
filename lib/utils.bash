@@ -64,6 +64,16 @@ filter_arch() {
 	jq -e --arg arch "$arch" 'select(.arch == $arch)'
 }
 
+filter_type() {
+	type=$1
+	supported_type=("tar.gz")
+	if [[ ! ${supported_type[*]} =~ $type ]]; then
+		fail "Unsupported type: $type"
+	fi
+	jq -e --arg type "$type" 'select(.type == $type)'
+
+}
+
 detect_os() {
 	local machine unameOut
 
