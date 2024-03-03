@@ -33,6 +33,7 @@ release=$(download_versions |
 	filter_os "$ASDF_OS" |
 	filter_arch "$ASDF_ARCH")
 
+echo "release: $release"
 url=$(jq -re '.publicUrl' <<<"$release")
 sha256=$(jq -re '.sha256' <<<"$release")
 version=$(jq -re '.version' <<<"$release")
