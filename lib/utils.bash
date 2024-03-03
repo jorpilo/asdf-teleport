@@ -26,7 +26,8 @@ download_versions() {
 	curl "${curl_opts[@]}" -s "${RELEASES_URL}" |
 		grep -oE '<script id="__NEXT_DATA__" type="application\/json">(.+)<\/script>' |
 		sed 's/<script id="__NEXT_DATA__" type="application\/json">//; s/<\/script>//' |
-		jq '.props.pageProps.initialDownloads[].versions | sort_by(.version)'
+		jq '.props.pageProps.initialDownloads[].versions' |
+		jq -s 'flatten | sort_by(.version) | reverse'
 }
 
 filter_prerelease() {
@@ -39,7 +40,7 @@ parse_versions() {
 
 select_version() {
 	version="$1"
-	if ! jq -e --arg version "$version" '.[] | select(.version | startswith($version))' | jq -se 'first'; then
+	if ! jq -e --arg version "$version" 'map(select(.version | startswith($version)))| first'; then
 		fail "Could not parse version $version from $RELEASES_URL"
 	fi | jq '.assets[] + {version: .version}'
 }
