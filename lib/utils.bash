@@ -64,10 +64,6 @@ filter_arch() {
 	jq -e --arg arch "$arch" 'select(.arch == $arch)'
 }
 
-assets_length() {
-	jq -s 'if length != 1 then halt_error(1) else .[] end'
-}
-
 detect_os() {
 	local machine unameOut
 

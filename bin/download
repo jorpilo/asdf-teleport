@@ -27,19 +27,11 @@ fi
 
 echo "Downloading release $ASDF_INSTALL_VERSION for OS: $ASDF_OS, Arch: $ASDF_ARCH"
 
-release=$(download_versions)
-echo "download_1"
-release=$(filter_prerelease <<<"$release")
-echo "download_2"
-echo "$release" >release.json
-release=$(select_version "$ASDF_INSTALL_VERSION" <<<"$release")
-echo "download_3"
-release=$(filter_os "$ASDF_OS" <<<"$release")
-echo "download_4"
-release=$(filter_arch "$ASDF_ARCH" <<<"$release")
-echo "download_5"
-release=$(assets_length <<<"$release")
-echo "download_6"
+release=$(download_versions |
+	filter_prerelease |
+	select_version "$ASDF_INSTALL_VERSION" |
+	filter_os "$ASDF_OS" |
+	filter_arch "$ASDF_ARCH")
 
 url=$(jq -re '.publicUrl' <<<"$release")
 sha256=$(jq -re '.sha256' <<<"$release")
