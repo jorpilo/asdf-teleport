@@ -4,7 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    prefix: "fix: "
+    commit-message:
+      prefix: "fix:"
     labels:
       - bot
       - dependencies
