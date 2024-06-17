@@ -29,7 +29,7 @@ filter_prerelease() {
 }
 
 parse_versions() {
-	jq  '.[].version' | jq -rs '@sh'
+	jq '.[].version' | jq -rs '@sh'
 }
 
 select_version() {
