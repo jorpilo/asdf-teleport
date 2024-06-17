@@ -18,3 +18,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           validateSingleCommit: true
+          ignoreLabels: |
+            bot
+            dependencies
+            ignore-semantic-pull-request
