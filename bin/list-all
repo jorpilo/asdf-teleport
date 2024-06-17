@@ -13,4 +13,4 @@ set +o allexport
 # shellcheck source=./lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
-download_versions | filter_prerelease | parse_versions | sed 's/\'//g'
+download_versions | filter_prerelease | parse_versions | sed "s/\'//g"
