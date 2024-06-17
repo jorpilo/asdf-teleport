@@ -30,6 +30,7 @@ filter_prerelease() {
 
 parse_versions() {
 	jq  '.[].version' | jq -rs '@sh'
+}
 
 select_version() {
 	version="$1"
